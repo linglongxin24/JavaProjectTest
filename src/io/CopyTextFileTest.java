@@ -11,15 +11,17 @@ public class CopyTextFileTest {
     public static void main(String args[]) {
         String src = "E:\\kejiang\\IdeaProjects\\JavaProjectTest\\src\\io\\CopyTextFileTest.java";
         String out = "E:\\kejiang\\IdeaProjects\\JavaProjectTest\\src\\io\\CopyTextFileTest_Copy.txt";
-//        FileReaderFileWriter(src, out);
-        BufferReaderBufferWriter(src, out);
+        //  FileReaderFileWriter(src, out);
+        //  BufferReaderBufferWriter(src, out);
+        //  InputStreamOutputStream(src, out);
+        BufferInputStreamBufferOutputStream(src, out);
     }
 
     /**
-     * 文件字符流读写复制文件
+     * 字符流读写复制文件
      *
-     * @param src
-     * @param out
+     * @param src 源文件
+     * @param out 目标文件
      */
     public static void FileReaderFileWriter(String src, String out) {
         FileWriter fileWriter = null;
@@ -68,8 +70,11 @@ public class CopyTextFileTest {
     }
 
     /**
-     * 缓冲区读写文件
+     * 字符流缓冲区读写文件
      * 效率比较高
+     *
+     * @param src 源文件
+     * @param out 目标文件
      */
     public static void BufferReaderBufferWriter(String src, String out) {
         BufferedWriter bufferedWriter = null;
@@ -94,5 +99,73 @@ public class CopyTextFileTest {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 字节流读写复制文件
+     *
+     * @param src 源文件
+     * @param out 目标文件
+     */
+    public static void InputStreamOutputStream(String src, String out) {
+        FileOutputStream outputStream = null;
+        FileInputStream inputStream = null;
+        try {
+            outputStream = new FileOutputStream(out);
+            inputStream = new FileInputStream(src);
+            byte[] bytes = new byte[1024];
+            int num = 0;
+            while ((num = inputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, num);
+                outputStream.flush();
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                outputStream.close();
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
+     * 字节缓冲流读写复制文件
+     *
+     * @param src 源文件
+     * @param out 目标文件
+     */
+    public static void BufferInputStreamBufferOutputStream(String src, String out) {
+        BufferedOutputStream bufferedOutputStream = null;
+        BufferedInputStream bufferedInputStream = null;
+        try {
+            bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(out));
+            bufferedInputStream = new BufferedInputStream(new FileInputStream(src));
+            byte[] bytes = new byte[1024];
+            int num = 0;
+            while ((num = bufferedInputStream.read(bytes)) != -1) {
+                bufferedOutputStream.write(bytes, 0, num);
+                bufferedOutputStream.flush();
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                bufferedOutputStream.close();
+                bufferedInputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }
